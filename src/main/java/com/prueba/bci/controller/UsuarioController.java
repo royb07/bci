@@ -19,17 +19,19 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<String> crearUsuario(@RequestBody @Valid Usuario usuario, BindingResult bindingResult) {
+    public ResponseEntity<Object> crearUsuario(@RequestBody @Valid Usuario usuario, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages.toString());
+            return ResponseEntity.badRequest().body(errorMessages);
         }
 
         try {
             usuarioService.crearUsuario(usuario);
             return ResponseEntity.ok("Usuario creado exitosamente");
+        } catch (UsuarioValidationException e) {
+            return ResponseEntity.badRequest().body(e.getErrorMessages());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear usuario");
         }
