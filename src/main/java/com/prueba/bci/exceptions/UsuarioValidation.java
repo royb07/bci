@@ -1,13 +1,13 @@
 
 
 public class UsuarioValidationException extends RuntimeException {
-    private final List<String> errorMessages;
+    private final List<ErrorDTO> errorMessages;
 
-    public UsuarioValidationException(List<String> errorMessages) {
+    public UsuarioValidationException(List<ErrorDTO> errorMessages) {
         this.errorMessages = errorMessages;
     }
 
-    public List<String> getErrorMessages() {
+    public List<ErrorDTO> getErrorMessages() {
         return errorMessages;
     }
 }

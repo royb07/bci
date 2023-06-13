@@ -42,14 +42,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void eliminarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
-
     private void validateUsuario(Usuario usuario) {
         Set<ConstraintViolation<Usuario>> violations = validator.validate(usuario);
         if (!violations.isEmpty()) {
-            List<String> errorMessages = violations.stream()
-                    .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+            List<ErrorDTO> errorMessages = violations.stream()
+                    .map(violation -> new ErrorDTO(violation.getPropertyPath().toString(), violation.getMessage()))
                     .collect(Collectors.toList());
             throw new UsuarioValidationException(errorMessages);
         }
-    }
 }
